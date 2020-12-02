@@ -1,4 +1,4 @@
-![icon](https://gitlab.com/rodrigovalla/matedulab/-/raw/master/assets/img/icon_64.png)
+![icon](https://gitlab.com/matedulab/matedulab.gitlab.io/-/raw/master/public/assets/img/icon_64.png)
 
 # Rock, Paper & Probabilities
 
