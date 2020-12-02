@@ -1,0 +1,9 @@
+{
+  "oPath": "data/",
+  "name": "testing",
+	"iterations": 3,
+	"rollcount": 40,
+	"matchsize": 7,
+	"computerdice": "rock,rock,paper,paper,scissors,scissors",
+	"playerdice": "rock,rock,paper,paper,scissors,scissors"
+}
