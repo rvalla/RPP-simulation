@@ -68,6 +68,7 @@ class Visualization:
 		auxt = Visualization.plottitles[3] + sname + "\n"
 		Visualization.plotMatches(8, 4.5, sname + "_matches", folder, summary, auxt + dicet)
 		print("-- Charts were saved!                 ", end="\n")
+		plt.close("all")
 		print()
 
 	def plotHistory(w, h, sname, folder, data, title):

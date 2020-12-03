@@ -8,61 +8,58 @@ from visualization import Visualization
 class PPP():
 	"Simulating Rock, Paper & Probabilities game"
 
-	config = None
-	vz = None
-	n = None #Number of simulated rolls
-	i = None #Number of iterations
-	ai = None #Active iteration
-	ms = None #Match size in rolls
-	discardtieds = None #Decide if tied rolls are part of a match
-	starttime = None
-	sname = None
-	rollresult = []
-	simulationdata = []
-	summarydata = None
-	rpath = None
-	dicefaces = ["rock", "paper", "scissors"]
-	cdice = [-1,-1,-1,-1,-1,-1]
-	pdice = [-1,-1,-1,-1,-1,-1]
-
 	def __init__(self, configpath):
-		PPP.config = js.load(open(configpath))
-		PPP.vz = Visualization(PPP.config["language"])
-		PPP.setConfig(PPP.config)
+		self.config = js.load(open(configpath))
+		self.vz = Visualization(self.config["language"])
+		self.n = None #Number of simulated rolls
+		self.i = None #Number of iterations
+		self.ai = None #Active iteration
+		self.ms = None #Match size in rolls
+		self.discardtieds = None #Decide if tied rolls are part of a match
+		self.starttime = None
+		self.sname = None
+		self.rollresult = []
+		self.simulationdata = []
+		self.summarydata = None
+		self.rpath = None
+		self.dicefaces = ["rock", "paper", "scissors"]
+		self.cdice = [-1,-1,-1,-1,-1,-1]
+		self.pdice = [-1,-1,-1,-1,-1,-1]
+		PPP.setConfig(self, self.config)
 		print()
 		print(self)
-		PPP.run()
-		PPP.exportRawData()
-		PPP.summarydata = PPP.buildSummary()
-		PPP.vz.autoCharts(PPP.sname, "charts/", PPP.cdice, PPP.pdice, PPP.simulationdata, PPP.summarydata)
-		PPP.exportSummary()
+		PPP.run(self)
+		PPP.exportRawData(self)
+		self.summarydata = PPP.buildSummary(self)
+		self.vz.autoCharts(self.sname, "charts/", self.cdice, self.pdice, self.simulationdata, self.summarydata)
+		PPP.exportSummary(self)
 
-	def run():
-		for d in range(PPP.i):
-			PPP.starttime = tm.time()
-			PPP.rollresult = [0, "?", "?", 0, 0, 0, 0, 0.0, 0.0, 0.0, 0, 0.0]
-			PPP.simulationdata.append(PPP.buildSimulationDataFrame())
+	def run(self):
+		for d in range(self.i):
+			self.starttime = tm.time()
+			self.rollresult = [0, "?", "?", 0, 0, 0, 0, 0.0, 0.0, 0.0, 0, 0.0]
+			self.simulationdata.append(PPP.buildSimulationDataFrame())
 			print("-- Simulation number: " + str(d) + "   ", end="\n")
-			PPP.simulation()
+			PPP.simulation(self)
 			print("-- Time needed: " + \
-					PPP.getSimulationTime(PPP.starttime, tm.time()) + "                 ", end="\n")
+					PPP.getSimulationTime(self.starttime, tm.time()) + "                 ", end="\n")
 			print("-- The data was saved!", end="\n")
 			print()
-			PPP.ai += 1
+			self.ai += 1
 
-	def simulation():
-		for d in range(PPP.n):
+	def simulation(self):
+		for d in range(self.n):
 			print("-- Roll " + str(d) + ":", end=" ")
-			r = PPP.play()
-			PPP.updateRoll(d+1, r)
-			print("W: " + str(PPP.rollresult[7]), end=" ")
-			print("T: " + str(PPP.rollresult[8]), end=" ")
-			print("L: " + str(PPP.rollresult[9]) + "     ", end="\r")
-			PPP.saveRoll(PPP.ai)
+			r = PPP.play(self)
+			PPP.updateRoll(self, d+1, r)
+			print("W: " + str(self.rollresult[7]), end=" ")
+			print("T: " + str(self.rollresult[8]), end=" ")
+			print("L: " + str(self.rollresult[9]) + "     ", end="\r")
+			PPP.saveRoll(self, self.ai)
 
-	def play():
-		c = rd.choice(PPP.cdice)
-		p = rd.choice(PPP.pdice)
+	def play(self):
+		c = rd.choice(self.cdice)
+		p = rd.choice(self.pdice)
 		r = PPP.decide(c, p)
 		return [c, p, r]
 
@@ -87,93 +84,93 @@ class PPP():
 			print("-- Dice has strange faces...")
 		return r
 
-	def updateRoll(n, results):
-		PPP.rollresult[0] = n
-		PPP.rollresult[1] = PPP.dicefaces[results[0]]
-		PPP.rollresult[2] = PPP.dicefaces[results[1]]
-		PPP.rollresult[3] = results[2]
-		PPP.updateRCounts(PPP.rollresult[3])
-		PPP.rollresult[7] = round(PPP.rollresult[4] / PPP.rollresult[0], 2)
-		PPP.rollresult[8] = round(PPP.rollresult[5] / PPP.rollresult[0], 2)
-		PPP.rollresult[9] = round(PPP.rollresult[6] / PPP.rollresult[0], 2)
-		PPP.rollresult[10] = PPP.rollresult[4] - PPP.rollresult[6]
-		PPP.rollresult[11] = round(PPP.rollresult[10] / PPP.rollresult[0], 2)
+	def updateRoll(self, n, results):
+		self.rollresult[0] = n
+		self.rollresult[1] = self.dicefaces[results[0]]
+		self.rollresult[2] = self.dicefaces[results[1]]
+		self.rollresult[3] = results[2]
+		PPP.updateRCounts(self, self.rollresult[3])
+		self.rollresult[7] = round(self.rollresult[4] / self.rollresult[0], 2)
+		self.rollresult[8] = round(self.rollresult[5] / self.rollresult[0], 2)
+		self.rollresult[9] = round(self.rollresult[6] / self.rollresult[0], 2)
+		self.rollresult[10] = self.rollresult[4] - self.rollresult[6]
+		self.rollresult[11] = round(self.rollresult[10] / self.rollresult[0], 2)
 
-	def updateRCounts(result):
+	def updateRCounts(self, result):
 		if result == 1:
-			PPP.rollresult[4] += 1
+			self.rollresult[4] += 1
 		if result == 0:
-			PPP.rollresult[5] += 1
+			self.rollresult[5] += 1
 		if result == -1:
-			PPP.rollresult[6] += 1
+			self.rollresult[6] += 1
 
-	def saveRoll(i):
-		row = pd.DataFrame([PPP.rollresult], columns = PPP.buildDataFrameColumns())
-		PPP.simulationdata[PPP.ai] = pd.concat([PPP.simulationdata[PPP.ai], row])
+	def saveRoll(self, i):
+		row = pd.DataFrame([self.rollresult], columns = PPP.buildDataFrameColumns())
+		self.simulationdata[self.ai] = pd.concat([self.simulationdata[self.ai], row])
 
-	def exportRawData():
-		for i in range(PPP.i):
-			PPP.simulationdata[i].set_index("n", inplace = True)
-			PPP.simulationdata[i].to_csv(PPP.config["oPath"] + PPP.sname + "_" + str(i) + ".csv")
+	def exportRawData(self):
+		for i in range(self.i):
+			self.simulationdata[i].set_index("n", inplace = True)
+			self.simulationdata[i].to_csv(self.config["oPath"] + self.sname + "_" + str(i) + ".csv")
 
-	def buildSummary():
-		d = PPP.buildSummaryDataFrame()
-		for i in range(PPP.i):
-			mr = PPP.getMatchesResults(PPP.simulationdata[i])
-			d.loc[d.index[i], "Won"] = PPP.simulationdata[i].loc[PPP.simulationdata[i].index[PPP.n - 1], "Won"]
-			d.loc[d.index[i], "Tied"] = PPP.simulationdata[i].loc[PPP.simulationdata[i].index[PPP.n - 1], "Tied"]
-			d.loc[d.index[i], "Lost"] = PPP.simulationdata[i].loc[PPP.simulationdata[i].index[PPP.n - 1], "Lost"]
+	def buildSummary(self):
+		d = PPP.buildSummaryDataFrame(self)
+		for i in range(self.i):
+			mr = self.getMatchesResults(self.simulationdata[i])
+			d.loc[d.index[i], "Won"] = self.simulationdata[i].loc[self.simulationdata[i].index[self.n - 1], "Won"]
+			d.loc[d.index[i], "Tied"] = self.simulationdata[i].loc[self.simulationdata[i].index[self.n - 1], "Tied"]
+			d.loc[d.index[i], "Lost"] = self.simulationdata[i].loc[self.simulationdata[i].index[self.n - 1], "Lost"]
 			d.loc[d.index[i], "Won matches"] = mr[0]
 			d.loc[d.index[i], "Lost matches"] = mr[1]
-		d.loc[d.index[PPP.i], "Won"] = round(d["Won"].mean(), 2)
-		d.loc[d.index[PPP.i], "Tied"] = round(d["Tied"].mean(), 2)
-		d.loc[d.index[PPP.i], "Lost"] = round(d["Lost"].mean(), 2)
-		d.loc[d.index[PPP.i], "Won matches"] = round(d["Won matches"].mean(), 2)
-		d.loc[d.index[PPP.i], "Lost matches"] = round(d["Lost matches"].mean(), 2)
+		d.loc[d.index[self.i], "Won"] = round(d["Won"].mean(), 2)
+		d.loc[d.index[self.i], "Tied"] = round(d["Tied"].mean(), 2)
+		d.loc[d.index[self.i], "Lost"] = round(d["Lost"].mean(), 2)
+		d.loc[d.index[self.i], "Won matches"] = round(d["Won matches"].mean(), 2)
+		d.loc[d.index[self.i], "Lost matches"] = round(d["Lost matches"].mean(), 2)
 		return d
 
-	def getMatchesResults(data):
-		if PPP.discardtieds == True:
+	def getMatchesResults(self, data):
+		if self.discardtieds == True:
 			rolls = data[data["Result"] != 0]
 			rolls.reset_index(inplace=True)
 		else:
 			rolls = data
-		p = PPP.ms
+		p = self.ms
 		mr = [0, 0]
 		while p < rolls.shape[0]:
-			r = rolls.loc[p - PPP.ms:p, "Result"].sum()
+			r = rolls.loc[p - self.ms:p, "Result"].sum()
 			if  r > 0:
 				mr[0] += 1
 			elif r < 0:
 				mr[1] += 1
-			p += PPP.ms
+			p += self.ms
 		return mr
 
-	def exportSummary():
-		PPP.summarydata.to_csv(PPP.config["oPath"] + PPP.sname + "_S" + ".csv")
+	def exportSummary(self):
+		self.summarydata.to_csv(self.config["oPath"] + self.sname + "_S" + ".csv")
 
-	def printRoll(results):
+	def printRoll(self, results):
 		return "-- The dice rolled:\n" + \
-				"-- " + dicefaces[results[0]] + "vs. " + dicefaces[results[1]] + \
+				"-- " + self.dicefaces[results[0]] + "vs. " + self.dicefaces[results[1]] + \
 				"--> " + str(results[2])
 
-	def setConfig(data):
-		PPP.n = data["rollcount"]
-		PPP.i = data["iterations"]
-		PPP.ai = 0
-		PPP.ms = data["matchsize"]
-		PPP.discardtieds = data["discardtieds"]
-		PPP.sname = data["name"]
-		PPP.buildDices(data["computerdice"], data["playerdice"])
+	def setConfig(self, data):
+		self.n = data["rollcount"]
+		self.i = data["iterations"]
+		self.ai = 0
+		self.ms = data["matchsize"]
+		self.discardtieds = data["discardtieds"]
+		self.sname = data["name"]
+		PPP.buildDices(self, data["computerdice"], data["playerdice"])
 
-	def buildDices(cd, pd):
+	def buildDices(self, cd, pd):
 		c = cd.split(",")
 		p = pd.split(",")
 		l = len(c)
 		if l == 6:
 			for f in range(l):
-				PPP.cdice[f] = PPP.setDiceFace(c[f])
-				PPP.pdice[f] =PPP.setDiceFace(p[f])
+				self.cdice[f] = PPP.setDiceFace(c[f])
+				self.pdice[f] =PPP.setDiceFace(p[f])
 		else:
 			print("-- Configuration data is strange...")
 
@@ -209,14 +206,14 @@ class PPP():
 		columns.append("delta%")
 		return columns
 
-	def buildSummaryDataFrame():
+	def buildSummaryDataFrame(self):
 		columns = []
 		columns.append("Won")
 		columns.append("Tied")
 		columns.append("Lost")
 		columns.append("Won matches")
 		columns.append("Lost matches")
-		p = pd.DataFrame(index=range(PPP.i + 1), columns=columns)
+		p = pd.DataFrame(index=range(self.i + 1), columns=columns)
 		p.index.name = "n"
 		return p
 

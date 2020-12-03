@@ -3,7 +3,7 @@
   "name": "testing",
 	"language": "spanish",
 	"iterations": 3,
-	"rollcount": 200,
+	"rollcount": 50,
 	"matchsize": 7,
 	"discardtieds": true,
 	"computerdice": "rock,rock,paper,paper,paper,scissors",

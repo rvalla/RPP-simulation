@@ -1,9 +1,9 @@
 {
   "oPath": "data/",
-  "name": "equal_1k",
+  "name": "equal_2k",
 	"language": "spanish",
 	"iterations": 3,
-	"rollcount": 1000,
+	"rollcount": 2000,
 	"matchsize": 7,
 	"discardtieds": true,
 	"computerdice": "rock,rock,paper,paper,scissors,scissors",
