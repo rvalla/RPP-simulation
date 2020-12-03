@@ -4,6 +4,7 @@
 	"iterations": 3,
 	"rollcount": 40,
 	"matchsize": 7,
+	"discardtieds": true,
 	"computerdice": "rock,rock,paper,paper,scissors,scissors",
 	"playerdice": "rock,rock,paper,paper,scissors,scissors"
 }

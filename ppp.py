@@ -12,6 +12,7 @@ class PPP():
 	i = None #Number of iterations
 	ai = None #Active iteration
 	ms = None #Match size in rolls
+	discardtieds = None #Decide if tied rolls are part of a match
 	starttime = None
 	sname = None
 	rollresult = []
@@ -123,20 +124,23 @@ class PPP():
 		return d
 
 	def getMatchesResults(data):
-		rolls = data[data["Result"] != 0]
-		rolls.reset_index(inplace=True)
+		if PPP.discardtieds == True:
+			rolls = data[data["Result"] != 0]
+			rolls.reset_index(inplace=True)
+		else:
+			rolls = data
 		p = PPP.ms
 		mr = [0, 0]
 		while p < rolls.shape[0]:
-			if rolls.loc[p - PPP.ms:p, "Result"].sum() > 0:
+			r = rolls.loc[p - PPP.ms:p, "Result"].sum()
+			if  r > 0:
 				mr[0] += 1
-			else:
+			elif r < 0:
 				mr[1] += 1
 			p += PPP.ms
 		return mr
 
 	def exportSummary():
-		#PPP.summarydata.set_index("n", inplace = True)
 		PPP.summarydata.to_csv(PPP.config["oPath"] + PPP.sname + "_S" + ".csv")
 
 	def printRoll(results):
@@ -149,6 +153,7 @@ class PPP():
 		PPP.i = data["iterations"]
 		PPP.ai = 0
 		PPP.ms = data["matchsize"]
+		PPP.discardtieds = data["discardtieds"]
 		PPP.sname = data["name"]
 		PPP.buildDices(data["computerdice"], data["playerdice"])
 
