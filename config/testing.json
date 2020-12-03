@@ -1,10 +1,11 @@
 {
   "oPath": "data/",
   "name": "testing",
+	"language": "spanish",
 	"iterations": 3,
-	"rollcount": 40,
+	"rollcount": 200,
 	"matchsize": 7,
 	"discardtieds": true,
-	"computerdice": "rock,rock,paper,paper,scissors,scissors",
-	"playerdice": "rock,rock,paper,paper,scissors,scissors"
+	"computerdice": "rock,rock,paper,paper,paper,scissors",
+	"playerdice": "paper,paper,paper,paper,scissors,rock"
 }

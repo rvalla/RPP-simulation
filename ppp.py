@@ -3,11 +3,13 @@ import time as tm
 import json as js
 import random as rd
 import pandas as pd
+from visualization import Visualization
 
 class PPP():
 	"Simulating Rock, Paper & Probabilities game"
 
 	config = None
+	vz = None
 	n = None #Number of simulated rolls
 	i = None #Number of iterations
 	ai = None #Active iteration
@@ -25,11 +27,14 @@ class PPP():
 
 	def __init__(self, configpath):
 		PPP.config = js.load(open(configpath))
+		PPP.vz = Visualization(PPP.config["language"])
 		PPP.setConfig(PPP.config)
+		print()
 		print(self)
 		PPP.run()
 		PPP.exportRawData()
 		PPP.summarydata = PPP.buildSummary()
+		PPP.vz.autoCharts(PPP.sname, "charts/", PPP.cdice, PPP.pdice, PPP.simulationdata, PPP.summarydata)
 		PPP.exportSummary()
 
 	def run():
@@ -40,15 +45,19 @@ class PPP():
 			print("-- Simulation number: " + str(d) + "   ", end="\n")
 			PPP.simulation()
 			print("-- Time needed: " + \
-					PPP.getSimulationTime(PPP.starttime, tm.time()))
-			print("-- The data was saved!             ", end="\n")
+					PPP.getSimulationTime(PPP.starttime, tm.time()) + "                 ", end="\n")
+			print("-- The data was saved!", end="\n")
+			print()
 			PPP.ai += 1
 
 	def simulation():
 		for d in range(PPP.n):
-			print("-- Rolling the dice: " + str(d) + "   ", end="\r")
+			print("-- Roll " + str(d) + ":", end=" ")
 			r = PPP.play()
 			PPP.updateRoll(d+1, r)
+			print("W: " + str(PPP.rollresult[7]), end=" ")
+			print("T: " + str(PPP.rollresult[8]), end=" ")
+			print("L: " + str(PPP.rollresult[9]) + "     ", end="\r")
 			PPP.saveRoll(PPP.ai)
 
 	def play():
@@ -99,7 +108,7 @@ class PPP():
 			PPP.rollresult[6] += 1
 
 	def saveRoll(i):
-		row = pd.DataFrame([PPP.rollresult], columns = PPP.simulationdata[0].columns)
+		row = pd.DataFrame([PPP.rollresult], columns = PPP.buildDataFrameColumns())
 		PPP.simulationdata[PPP.ai] = pd.concat([PPP.simulationdata[PPP.ai], row])
 
 	def exportRawData():
@@ -159,7 +168,7 @@ class PPP():
 
 	def buildDices(cd, pd):
 		c = cd.split(",")
-		p = cd.split(",")
+		p = pd.split(",")
 		l = len(c)
 		if l == 6:
 			for f in range(l):
@@ -179,6 +188,12 @@ class PPP():
 		return n
 
 	def buildSimulationDataFrame():
+		columns = PPP.buildDataFrameColumns()
+		p = pd.DataFrame(columns=columns)
+		p.index.name = "n"
+		return p
+
+	def buildDataFrameColumns():
 		columns = []
 		columns.append("n")
 		columns.append("Computer")
@@ -192,10 +207,7 @@ class PPP():
 		columns.append("Lost%")
 		columns.append("delta")
 		columns.append("delta%")
-		p = pd.DataFrame(columns=columns)
-		p.index = p["n"]
-		p.index.name = "n"
-		return p
+		return columns
 
 	def buildSummaryDataFrame():
 		columns = []
@@ -227,4 +239,5 @@ class PPP():
 	def __str__(self):
 		return "-- MatEduLab\n" + \
 				"-- Rock, Paper & Probabilities\n" + \
-				"-- Simulating the game..."
+				"-- https://gitlab.com/matedulab/rpp-simulation\n" + \
+				"-- Simulating the game...\n"
