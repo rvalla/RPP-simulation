@@ -115,16 +115,16 @@ class PPP():
 			d.loc[d.index[i], "Lost"] = PPP.simulationdata[i].loc[PPP.simulationdata[i].index[PPP.n - 1], "Lost"]
 			d.loc[d.index[i], "Won matches"] = mr[0]
 			d.loc[d.index[i], "Lost matches"] = mr[1]
-		d.loc[d.index[PPP.i], "Won"] = d["Won"].mean()
-		d.loc[d.index[PPP.i], "Tied"] = d["Tied"].mean()
-		d.loc[d.index[PPP.i], "Lost"] = d["Lost"].mean()
-		d.loc[d.index[PPP.i], "Won matches"] = d["Won matches"].mean()
-		d.loc[d.index[PPP.i], "Lost matches"] = d["Lost matches"].mean()
+		d.loc[d.index[PPP.i], "Won"] = round(d["Won"].mean(), 2)
+		d.loc[d.index[PPP.i], "Tied"] = round(d["Tied"].mean(), 2)
+		d.loc[d.index[PPP.i], "Lost"] = round(d["Lost"].mean(), 2)
+		d.loc[d.index[PPP.i], "Won matches"] = round(d["Won matches"].mean(), 2)
+		d.loc[d.index[PPP.i], "Lost matches"] = round(d["Lost matches"].mean(), 2)
 		return d
 
 	def getMatchesResults(data):
 		rolls = data[data["Result"] != 0]
-		rolls.to_csv(PPP.config["oPath"] + "saraza.csv")
+		rolls.reset_index(inplace=True)
 		p = PPP.ms
 		mr = [0, 0]
 		while p < rolls.shape[0]:
