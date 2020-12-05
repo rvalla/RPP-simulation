@@ -236,4 +236,5 @@ class PPP():
 		return "-- MatEduLab\n" + \
 				"-- Rock, Paper & Probabilities\n" + \
 				"-- https://gitlab.com/matedulab/rpp-simulation\n" + \
+				"-- version: 0.90\n" + \
 				"-- Simulating the game...\n"
