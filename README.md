@@ -14,7 +14,7 @@ The output face of a dice is selected randomly, but the odds can be on your side
 You need **python3** and **pandas** and **matplotlib** libraries to run this software. Then, from the folder where
 you copied the files simply run:
 
-```python3
+```python
 from ppp import PPP
 g = PPP("pathtojson/config.json")
 ```
@@ -37,7 +37,7 @@ You can configure the simulations trough a *.json* file which fields are:
 {
 	"dPath": "data/",
 	"cPath": "charts/",
-  "name": "testing",
+	"name": "testing",
 	"language": "spanish",
 	"iterations": 3,
 	"rollcount": 50,
