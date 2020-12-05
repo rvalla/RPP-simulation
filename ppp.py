@@ -21,7 +21,6 @@ class PPP():
 		self.rollresult = []
 		self.simulationdata = []
 		self.summarydata = None
-		self.rpath = None
 		self.dicefaces = ["rock", "paper", "scissors"]
 		self.cdice = [-1,-1,-1,-1,-1,-1]
 		self.pdice = [-1,-1,-1,-1,-1,-1]
@@ -31,7 +30,7 @@ class PPP():
 		PPP.run(self)
 		PPP.exportRawData(self)
 		self.summarydata = PPP.buildSummary(self)
-		self.vz.autoCharts(self.sname, "charts/", self.cdice, self.pdice, self.simulationdata, self.summarydata)
+		self.vz.autoCharts(self.sname, self.config["cPath"], self.cdice, self.pdice, self.simulationdata, self.summarydata)
 		PPP.exportSummary(self)
 
 	def run(self):
@@ -111,7 +110,7 @@ class PPP():
 	def exportRawData(self):
 		for i in range(self.i):
 			self.simulationdata[i].set_index("n", inplace = True)
-			self.simulationdata[i].to_csv(self.config["oPath"] + self.sname + "_" + str(i) + ".csv")
+			self.simulationdata[i].to_csv(self.config["dPath"] + self.sname + "_" + str(i) + ".csv")
 
 	def buildSummary(self):
 		d = PPP.buildSummaryDataFrame(self)
@@ -147,7 +146,7 @@ class PPP():
 		return mr
 
 	def exportSummary(self):
-		self.summarydata.to_csv(self.config["oPath"] + self.sname + "_S" + ".csv")
+		self.summarydata.to_csv(self.config["dPath"] + self.sname + "_S" + ".csv")
 
 	def printRoll(self, results):
 		return "-- The dice rolled:\n" + \
