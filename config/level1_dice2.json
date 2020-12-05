@@ -1,5 +1,6 @@
 {
-  "oPath": "data/",
+	"dPath": "data/",
+	"cPath": "charts/",
   "name": "level1_dice2_2K",
 	"language": "spanish",
 	"iterations": 3,

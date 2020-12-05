@@ -1,5 +1,6 @@
 {
-  "oPath": "data/",
+  "dPath": "data/",
+	"cPath": "charts/",
   "name": "testing",
 	"language": "spanish",
 	"iterations": 3,
