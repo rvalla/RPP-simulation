@@ -1,0 +1,12 @@
+{
+	"dPath": "data/",
+	"cPath": "charts/",
+  "name": "level2_dice1_2K",
+	"language": "spanish",
+	"iterations": 3,
+	"rollcount": 2000,
+	"matchsize": 7,
+	"discardtieds": true,
+	"computerdice": "rock,rock,scissors,scissors,scissors,scissors",
+	"playerdice": "rock,rock,rock,rock,rock,scissors"
+}
